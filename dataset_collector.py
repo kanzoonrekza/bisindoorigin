@@ -25,7 +25,7 @@ def main():
         key = cv2.waitKey(1) & 0xFF
 
         # Optional: Show FPS
-        frame_fps, pTime = show_fps(cv2, frame, pTime)
+        pTime = show_fps(cv2, frame, pTime)
 
         cv2.imshow("BISINDO-Recognition", frame)
         if key == ord('q'):
