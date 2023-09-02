@@ -4,10 +4,10 @@ def init_output(cv2, filename, fps, width, height):
                            (width, height))
 
 
-def record_video(cv2, output, frame, start_time, video_duration):
+def record_video(cv2, output, frame, start_time, video_duration, video_index):
     output.write(frame)
     if cv2.getTickCount() - start_time >= video_duration * cv2.getTickFrequency():
         output.release()
         print(f"Recording saved")
-        return False
-    return True
+        return False, video_index + 1
+    return True, video_index

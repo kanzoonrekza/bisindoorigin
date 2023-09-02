@@ -7,7 +7,6 @@ CAMERA_INDEX = 0
 CAMERA_WIDTH = 1920
 CAMERA_HEIGHT = 1080
 
-OUTPUT_FILENAME = "video-1.mp4"
 
 def init_camera():
     cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_DSHOW)
@@ -25,10 +24,9 @@ def main():
     pTime = 0
     isRecording = False
     recording_duration = 2
+    video_index = 0
 
     cap = init_camera()
-    output = init_output(cv2, OUTPUT_FILENAME, 24,
-                          CAMERA_WIDTH, CAMERA_HEIGHT)
 
     while True:
         success, frame = cap.read()
@@ -37,8 +35,8 @@ def main():
         key = cv2.waitKey(1) & 0xFF
 
         if isRecording:
-            isRecording = record_video(
-                cv2, output, frame, start_time, recording_duration)
+            isRecording, video_index = record_video(
+                cv2, output, frame, start_time, recording_duration, video_index)
 
         # Optional: Show FPS
         pTime = show_fps(cv2, frame, pTime)
@@ -49,7 +47,10 @@ def main():
             break
 
         if key == ord(' '):
+            output = init_output(cv2, f"video-{video_index}.mp4", 24,
+                                 CAMERA_WIDTH, CAMERA_HEIGHT)
             print("Start recording")
+            # video_index += 1
             isRecording = True
             start_time = cv2.getTickCount()
 
