@@ -1,4 +1,5 @@
 import cv2
+import os
 
 from utils.show_fps import show_fps
 from utils.save_raw_video import init_output, record_video
@@ -6,6 +7,10 @@ from utils.save_raw_video import init_output, record_video
 CAMERA_INDEX = 0
 CAMERA_WIDTH = 1920
 CAMERA_HEIGHT = 1080
+
+FOLDER_NAME = 'dataset'
+CLASS_TAKEN = 'a'
+BASE_PATH = f"{FOLDER_NAME}/{CLASS_TAKEN}"
 
 
 def init_camera():
@@ -20,11 +25,19 @@ def init_camera():
     return cap
 
 
+def init_folder():
+    try:
+        os.makedirs(BASE_PATH)
+    except:
+        pass
+
+
 def main():
+    init_folder()
     pTime = 0
     isRecording = False
     recording_duration = 2
-    video_index = 0
+    video_index = 1
 
     cap = init_camera()
 
@@ -43,14 +56,13 @@ def main():
 
         cv2.imshow("BISINDO-Recognition", frame)
 
-        if key == ord('q'):
+        if key == ord('q') or key == ord('Q'):
             break
 
         if key == ord(' '):
-            output = init_output(cv2, f"video-{video_index}.mp4", 24,
-                                 CAMERA_WIDTH, CAMERA_HEIGHT)
+            output = init_output(
+                cv2, f"{BASE_PATH}/video-{video_index}.mp4", 24, CAMERA_WIDTH, CAMERA_HEIGHT)
             print("Start recording")
-            # video_index += 1
             isRecording = True
             start_time = cv2.getTickCount()
 
