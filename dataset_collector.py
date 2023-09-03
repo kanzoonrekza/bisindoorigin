@@ -60,6 +60,11 @@ def main():
             break
 
         if key == ord(' '):
+            while os.path.exists(f"{BASE_PATH}/video-{video_index}.mp4"):
+                print(
+                    f"The folder {BASE_PATH}/video-{video_index}.mp4 exists.")
+                video_index += 1
+
             output = init_output(
                 cv2, f"{BASE_PATH}/video-{video_index}.mp4", 24, CAMERA_WIDTH, CAMERA_HEIGHT)
             print("Start recording")
