@@ -9,8 +9,8 @@ CAMERA_WIDTH = 1920
 CAMERA_HEIGHT = 1080
 
 FOLDER_NAME = 'dataset'
-CLASS_TAKEN = 'a'
-BASE_PATH = f"{FOLDER_NAME}/{CLASS_TAKEN}"
+CLASSES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+           'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 
 def init_camera():
@@ -25,21 +25,21 @@ def init_camera():
     return cap
 
 
-def init_folder():
+def init_folder(label_index):
     try:
-        os.makedirs(BASE_PATH)
+        os.makedirs(f"{FOLDER_NAME}/{CLASSES[label_index]}")
     except:
         pass
 
 
 def main():
-    init_folder()
+    label_index = 0
     pTime = 0
     isRecording = False
     recording_duration = 2
     video_index = 1
-
     cap = init_camera()
+    init_folder(label_index)
 
     while True:
         success, frame = cap.read()
@@ -53,6 +53,8 @@ def main():
 
         # Optional: Show FPS
         pTime = show_fps(cv2, frame, pTime)
+        cv2.putText(frame, f"{CLASSES[label_index]}", (100, 70),
+                    cv2.FONT_HERSHEY_PLAIN, 3, (200, 200, 60), 3)
         if isRecording:
             cv2.putText(frame, f"RECORDING {video_index}", (300, 70),
                         cv2.FONT_HERSHEY_PLAIN, 3, (50, 200, 60), 3)
@@ -63,16 +65,30 @@ def main():
             break
 
         if key == ord(' ') and not isRecording:
-            while os.path.exists(f"{BASE_PATH}/video{video_index}.mp4"):
+            while os.path.exists(f"{FOLDER_NAME}/{CLASSES[label_index]}/video{video_index}.mp4"):
                 print(
-                    f"The folder {BASE_PATH}/video{video_index}.mp4 exists.")
+                    f"The folder {FOLDER_NAME}/{CLASSES[label_index]}/video{video_index}.mp4 exists.")
                 video_index += 1
 
             output = init_output(
-                cv2, f"{BASE_PATH}/video{video_index}.mp4", 24, CAMERA_WIDTH, CAMERA_HEIGHT)
+                cv2, f"{FOLDER_NAME}/{CLASSES[label_index]}/video{video_index}.mp4", 24, CAMERA_WIDTH, CAMERA_HEIGHT)
             print("Start recording")
             isRecording = True
             start_time = cv2.getTickCount()
+
+        if key == ord('<'):  # Prev label
+            label_index -= 1
+            video_index = 1
+            init_folder(label_index)
+
+        if key == ord('0'):  # First label
+            label_index = 0
+            video_index = 1
+
+        if key == ord('>'):  # Next label
+            label_index += 1
+            video_index = 1
+            init_folder(label_index)
 
     cap.release()
     cv2.destroyAllWindows()
