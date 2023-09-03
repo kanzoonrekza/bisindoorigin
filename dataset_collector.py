@@ -54,7 +54,7 @@ def main():
         # Optional: Show FPS
         pTime = show_fps(cv2, frame, pTime)
         if isRecording:
-            cv2.putText(frame, "RECORDING", (300, 70),
+            cv2.putText(frame, f"RECORDING {video_index}", (300, 70),
                         cv2.FONT_HERSHEY_PLAIN, 3, (50, 200, 60), 3)
 
         cv2.imshow("BISINDO-Recognition", frame)
@@ -62,7 +62,7 @@ def main():
         if key == ord('q') or key == ord('Q'):
             break
 
-        if key == ord(' '):
+        if key == ord(' ') and not isRecording:
             while os.path.exists(f"{BASE_PATH}/video{video_index}.mp4"):
                 print(
                     f"The folder {BASE_PATH}/video{video_index}.mp4 exists.")
