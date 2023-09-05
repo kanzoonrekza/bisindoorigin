@@ -57,7 +57,7 @@ def main():
                     cv2.FONT_HERSHEY_PLAIN, 3, (200, 200, 60), 3)
         if isRecording:
             cv2.putText(frame, f"RECORDING {video_index}", (300, 70),
-                        cv2.FONT_HERSHEY_PLAIN, 3, (50, 200, 60), 3)
+                        cv2.FONT_HERSHEY_PLAIN, 3, (50, 250, 60), 3)
 
         cv2.imshow("BISINDO-Recognition", frame)
 
