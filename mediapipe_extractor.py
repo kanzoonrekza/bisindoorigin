@@ -7,6 +7,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 FOLDER_NAME = 'dataset'
+OUTPUT_FOLDER_NAME = 'extracted_dataset'
 
 
 def extract_landmarks_from_video(video_path):
@@ -35,15 +36,27 @@ def extract_landmarks_from_video(video_path):
 
 
 def main():
-    for foldername, subfolders, filenames in os.walk(FOLDER_NAME):
-        for filename in filenames:
-            file_path = os.path.join(foldername, filename)
-            landmarks = extract_landmarks_from_video(file_path)
-            print(file_path+" being extracted")
-            if landmarks is not None:
-                # Save the landmarks as an array file (e.g., using pickle)
-                output_file = os.path.splitext(file_path)[0] + "_landmarks.npy"
-                np.save(output_file, landmarks)
+    for (root, folders, files) in os.walk(FOLDER_NAME):
+        if root == FOLDER_NAME:
+            for foldername in folders:
+                try:
+                    os.makedirs(f"{OUTPUT_FOLDER_NAME}/{foldername}")
+                except:
+                    pass
+        else:
+            for filename in files:
+                file_path = os.path.join(os.path.relpath(
+                    root, FOLDER_NAME), filename)
+                if not os.path.exists(os.path.join(OUTPUT_FOLDER_NAME, os.path.splitext(file_path)[0] + "_landmarks.npy")):
+                    landmarks = extract_landmarks_from_video(
+                        os.path.join(FOLDER_NAME, file_path))
+                    print('extracting' + os.path.join(FOLDER_NAME, file_path))
+                    if landmarks is not None:
+                        # if True:
+                        output_file = os.path.join(OUTPUT_FOLDER_NAME, os.path.splitext(file_path)[
+                            0] + "_landmarks.npy")
+                        np.save(output_file, landmarks)
+                        print(output_file)
     print("extraction complete")
 
 
