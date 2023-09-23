@@ -7,7 +7,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 FOLDER_NAME = 'dataset'
-OUTPUT_FOLDER_NAME = 'extracted_dataset'
+OUTPUT_FOLDER_NAME = 'dataset_extracted'
 
 
 def extract_landmarks_from_video(video_path):
@@ -24,11 +24,16 @@ def extract_landmarks_from_video(video_path):
             # Process the frame and get the holistic results
             results = holistic.process(frame)
 
-            # Extract landmarks if found
-            if results.pose_landmarks:
-                landmarks = np.array([(lm.x, lm.y, lm.z)
-                                     for lm in results.pose_landmarks.landmark])
-                landmarks_list.append(landmarks)
+            # Extract landmarks
+            pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten(
+            ) if results.pose_landmarks else np.zeros(33*4)
+            face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten(
+            ) if results.face_landmarks else np.zeros(468*3)
+            lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten(
+            ) if results.left_hand_landmarks else np.zeros(21*3)
+            rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten(
+            ) if results.right_hand_landmarks else np.zeros(21*3)
+            landmarks_list.append(np.concatenate([pose, face, lh, rh]))
 
         cap.release()
 
