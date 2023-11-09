@@ -8,9 +8,8 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 FOLDER_NAME = 'dataset'
-OUTPUT_FOLDER_NAME = 'dataset_extracted'
-OUTPUT_VIDEO_FOLDER_NAME = 'dataset_extracted_video'
-
+OUTPUT_FOLDER_NAME = 'dataset_extracted/holistic/landmarks'
+OUTPUT_VIDEO_FOLDER_NAME = 'dataset_extracted/holistic/videos'
 
 def extract_landmarks_from_video(file_path):
     cap = cv2.VideoCapture(os.path.join(FOLDER_NAME, file_path))
