@@ -1,0 +1,1 @@
+Always run the program from this root folder `*/bisindoorigin/`
