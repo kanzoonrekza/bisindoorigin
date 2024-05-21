@@ -1,8 +1,17 @@
 import time
+import cv2
 
 cTime = 0
 
-def show_fps(cv2, frame, pTime):
+def show_fps(frame, pTime):
+    """Show fps on top left corner
+
+    To use, initiate pTime in main program 
+    `pTime=0`
+
+    Then, before show frame, use this function 
+    `pTime = show_fps(frame, pTime)`
+    """
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
