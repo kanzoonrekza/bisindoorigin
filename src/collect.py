@@ -5,6 +5,8 @@ from utils.alphabet import pick_alphabet, show_current
 from utils.mediapipe_legacy import mp_hands_legacy
 import cv2
 import copy
+import os
+
 
 def main():
     cap = init_fhd(0)
@@ -29,14 +31,19 @@ def main():
             # Keybind to pick an alphabet
             if key == ord('1'):
                 isSelectingAlphabet = True
+                video_index = 1
 
             # Picking an alphabet
             if isSelectingAlphabet:
                 alphabet, isSelectingAlphabet = pick_alphabet(key, frame)
+                if key in range(ord('a'), ord('z') + 1):
+                    video_index = Folder.get_current_index(
+                        alphabet, video_index)
 
             if key == ord(' ') and not isCapturing and alphabet is not None:
                 isCapturing = True
                 Folder.init(alphabet)
+
                 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
                 out_raw = cv2.VideoWriter(
                     f'dataset/{alphabet}/{alphabet}_{video_index}_raw.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
