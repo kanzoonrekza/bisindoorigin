@@ -12,8 +12,6 @@ def pick_alphabet(key, frame):
 
     Don't forget to handle the `isSelectingAlphabet` state 
     """
-    cv2.putText(frame, f"Press an alphabet on keyboard to select it",
-                (10, 170), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     if key in range(ord('a'), ord('z') + 1):
         return chr(key), False
     return None, True

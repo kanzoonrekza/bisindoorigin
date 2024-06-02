@@ -1,20 +1,18 @@
 from utils.camera import init_fhd
-from utils.show_fps import show_fps
-from utils.video import Folder, show_menu
-from utils.alphabet import pick_alphabet, show_current
+from utils.show import Show
+from utils.video import Folder
 from utils.mediapipe_legacy import mp_hands_legacy
 import cv2
 import copy
-import os
 
 
 def main():
-    cap = init_fhd(0)
+    cap = init_fhd(1)
     pTime = 0
     fps = 15
     alphabet, isSelectingAlphabet = None, False
     isCapturing, video_index = False, 1
-    frame_counter, capture_length = 0, 30
+    frame_counter, capture_length, delay_length = 0, 15, 5
 
     with mp_hands_legacy.setup() as hands:
         while True:
@@ -35,8 +33,9 @@ def main():
 
             # Picking an alphabet
             if isSelectingAlphabet:
-                alphabet, isSelectingAlphabet = pick_alphabet(key, frame)
+                Show.selecting_alphabet_notification(frame)
                 if key in range(ord('a'), ord('z') + 1):
+                    alphabet, isSelectingAlphabet = chr(key), False
                     video_index = Folder.get_current_index(
                         alphabet, video_index)
 
@@ -50,27 +49,28 @@ def main():
                 out = cv2.VideoWriter(
                     f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
 
-            # Hands and draw to frame process
             results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             mp_hands_legacy.draw(results, frame)
 
             if isCapturing:
-                print(f"capturing frame {frame_counter}")
-                out_raw.write(scene)
-                out.write(frame)
                 frame_counter += 1
-
-                if frame_counter == capture_length:
+                if frame_counter < delay_length:
+                    Show.capture_countdown(frame, frame_counter, delay_length)
+                elif frame_counter == capture_length+delay_length:
                     out_raw.release()
                     out.release()
                     frame_counter = 0
                     isCapturing = False
-                    video_index += 1
+                else:
+                    out_raw.write(scene)
+                    out.write(frame)
 
             # Showing FPS and alphabet indicator
-            show_current(frame, alphabet, video_index)
-            pTime = show_fps(frame, pTime)
-            show_menu(frame)
+            Show.current_alphabet_and_index(frame, alphabet, video_index)
+            Show.menu(frame)
+            Show.current_frame_captured(
+                frame, frame_counter-delay_length)
+            pTime = Show.fps(frame, pTime)
 
             cv2.imshow("BISINDO-Recognition", frame)
 
