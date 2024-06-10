@@ -1,26 +1,28 @@
 from utils.camera import init_fhd
 from utils.show import Show
 from utils.video import Folder
-from utils.mediapipe_legacy import mp_hands_legacy
+from utils.mediapipe_legacy import mp_hands_legacy, mp_holistic_legacy
 import cv2
 import copy
 
 
 def main():
-    cap = init_fhd(1)
+    cap = init_fhd(0)
     pTime = 0
-    fps = 15
+    fps = 24
     alphabet, isSelectingAlphabet = None, False
     isCapturing, video_index = False, 1
     frame_counter, capture_length, delay_length = 0, 15, 5
 
-    with mp_hands_legacy.setup() as hands:
+    with mp_holistic_legacy.setup() as holistic: 
         while True:
             success, frame = cap.read()
             scene = copy.deepcopy(frame)
             if not success:
                 break
-            key = cv2.waitKey(int(1000 / fps)) & 0xFF
+            # key = cv2.waitKey(int(1000 / fps)) & 0xFF
+            key = cv2.waitKey(1) & 0xFF
+
 
             # Keybind to stop the program
             if key == ord('0'):
@@ -49,8 +51,8 @@ def main():
                 out = cv2.VideoWriter(
                     f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
 
-            results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-            mp_hands_legacy.draw(results, frame)
+            results =holistic.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            mp_holistic_legacy.draw(results, frame)
 
             if isCapturing:
                 frame_counter += 1
