@@ -4,6 +4,7 @@ from utils.video import Folder
 from utils.mediapipe_legacy import mp_hands_legacy, mp_holistic_legacy
 import cv2
 import copy
+import numpy as np
 
 
 def main():
@@ -13,8 +14,10 @@ def main():
     alphabet, isSelectingAlphabet = None, False
     isCapturing, video_index = False, 1
     frame_counter, capture_length, delay_length = 0, 15, 5
+    landmarks_list = []
+    window_name = "BISINDO-Recognition"
 
-    with mp_holistic_legacy.setup() as holistic: 
+    with mp_holistic_legacy.setup() as holistic:
         while True:
             success, frame = cap.read()
             scene = copy.deepcopy(frame)
@@ -23,10 +26,13 @@ def main():
             # key = cv2.waitKey(int(1000 / fps)) & 0xFF
             key = cv2.waitKey(1) & 0xFF
 
-
             # Keybind to stop the program
             if key == ord('0'):
                 break
+
+            def on_mouse_click(event, x, y, flags, param):
+                if event == cv2.EVENT_LBUTTONDOWN:
+                    print("Left mouse button clicked at", x, y)
 
             # Keybind to pick an alphabet
             if key == ord('1'):
@@ -50,8 +56,9 @@ def main():
                     f'dataset/{alphabet}/{alphabet}_{video_index}_raw.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
                 out = cv2.VideoWriter(
                     f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
+                out_np = (f'dataset/{alphabet}/{alphabet}_{video_index}.npy')
 
-            results =holistic.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            results = holistic.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             mp_holistic_legacy.draw(results, frame)
 
             if isCapturing:
@@ -63,6 +70,7 @@ def main():
                     out.release()
                     frame_counter = 0
                     isCapturing = False
+                    np.save(out_np, landmarks_list)
                 else:
                     out_raw.write(scene)
                     out.write(frame)
@@ -74,7 +82,9 @@ def main():
                 frame, frame_counter-delay_length)
             pTime = Show.fps(frame, pTime)
 
-            cv2.imshow("BISINDO-Recognition", frame)
+            cv2.namedWindow(window_name)
+            cv2.setMouseCallback(window_name, on_mouse_click)
+            cv2.imshow(window_name, frame)
 
     return
 
