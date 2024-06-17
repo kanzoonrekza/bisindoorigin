@@ -1,4 +1,6 @@
 import mediapipe as mp
+import numpy as np
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -74,3 +76,21 @@ class mp_holistic_legacy:
             if results.right_hand_landmarks:
                 mp_drawing.draw_landmarks(
                     frame, results.right_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
+
+    def collectData(results, landmarks_list):
+        """Collects data from results
+
+        To use, call `mp_holistic_legacy.collectData(results)`
+
+        """
+        if results:
+            pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten(
+            ) if results.pose_landmarks else np.zeros(33*4)
+            face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten(
+            ) if results.face_landmarks else np.zeros(468*3)
+            lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten(
+            ) if results.left_hand_landmarks else np.zeros(21*3)
+            rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten(
+            ) if results.right_hand_landmarks else np.zeros(21*3)
+
+        return landmarks_list.append(np.concatenate([pose, face, lh, rh]))
