@@ -3,7 +3,6 @@ from utils.show import Show
 from utils.video import Folder
 from utils.mediapipe_legacy import mp_holistic_legacy
 import cv2
-import copy
 import numpy as np
 
 
@@ -13,33 +12,45 @@ def on_mouse_click(event, x, y, flags, param):
 
 
 def main():
+    # * Unchangeable initial values
     pTime = 0
     alphabet, isSelectingAlphabet = None, False
     isCapturing, video_index = False, 1
     landmarks_list = []
 
+    # * Changable initial values
     cap = init_fhd(0)
     window_name = "BISINDO-Recognition"
     fps = 0
-    frame_counter, capture_length, delay_length = 0, 15, 5
+    frame_counter, capture_length = 0, 15
+    delay_length = 5
+    isCapturingDrawed = True
 
     with mp_holistic_legacy.setup() as holistic:
         while True:
             success, frame = cap.read()
-            scene = copy.deepcopy(frame)
             if not success:
                 break
-
             key = cv2.waitKey(int(1000 / fps) if fps > 0 else 1) & 0xFF
 
-            # Keybind to stop the program
+            # Keyboard keybinds
             if key == ord('0'):
                 break
-
-            # Keybind to pick an alphabet
             if key == ord('1'):
                 isSelectingAlphabet = True
                 video_index = 1
+            if key == ord(' ') and not isCapturing and alphabet is not None:
+                isCapturing = True
+                Folder.init(alphabet)
+
+                fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+                out_raw = cv2.VideoWriter(
+                    f'dataset/{alphabet}/{alphabet}_{video_index}_raw.mp4', fourcc, fps if fps > 0 else 24, (frame.shape[1], frame.shape[0]))
+                if isCapturingDrawed:
+                    out = cv2.VideoWriter(
+                        f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps if fps > 0 else 24, (frame.shape[1], frame.shape[0]))
+                out_np = (f'dataset/{alphabet}/{alphabet}_{video_index}.npy')
+                print(f'Start Capturing {alphabet}_{video_index}')
 
             # Picking an alphabet
             if isSelectingAlphabet:
@@ -49,33 +60,33 @@ def main():
                     video_index = Folder.get_current_index(
                         alphabet, video_index)
 
-            if key == ord(' ') and not isCapturing and alphabet is not None:
-                isCapturing = True
-                Folder.init(alphabet)
+            if isCapturing:
+                frame_counter += 1
 
-                fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-                out_raw = cv2.VideoWriter(
-                    f'dataset/{alphabet}/{alphabet}_{video_index}_raw.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
-                out = cv2.VideoWriter(
-                    f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps, (frame.shape[1], frame.shape[0]))
-                out_np = (f'dataset/{alphabet}/{alphabet}_{video_index}.npy')
+            if isCapturing and frame_counter < delay_length:
+                Show.capture_countdown(frame, frame_counter, delay_length)
 
+            if isCapturing and frame_counter > delay_length and frame_counter < capture_length+delay_length:
+                out_raw.write(frame)
+
+            # * Capture landmarks with mediapipe
             results = holistic.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             mp_holistic_legacy.draw(results, frame)
 
-            if isCapturing:
-                frame_counter += 1
-                if frame_counter < delay_length:
-                    Show.capture_countdown(frame, frame_counter, delay_length)
-                elif frame_counter == capture_length+delay_length:
-                    out_raw.release()
-                    out.release()
-                    frame_counter = 0
-                    isCapturing = False
-                    np.save(out_np, landmarks_list)
-                else:
-                    out_raw.write(scene)
+            if isCapturing and frame_counter > delay_length and frame_counter < capture_length+delay_length:
+                # TODO: insert np array to the landmarks_list
+                if isCapturingDrawed:
                     out.write(frame)
+
+            if isCapturing and frame_counter == capture_length+delay_length:
+                print(f'Capturing Done {alphabet}_{video_index}')
+                if isCapturingDrawed:
+                    out.release()
+                out_raw.release()
+                frame_counter = 0
+                isCapturing = False
+                np.save(out_np, landmarks_list)
+                video_index += 1
 
             # Showing FPS and alphabet indicator
             Show.current_alphabet_and_index(frame, alphabet, video_index)
