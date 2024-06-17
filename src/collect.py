@@ -74,7 +74,7 @@ def main():
             mp_holistic_legacy.draw(results, frame)
 
             if isCapturing and frame_counter > delay_length and frame_counter < capture_length+delay_length:
-                # TODO: insert np array to the landmarks_list
+                mp_holistic_legacy.collectData(results, landmarks_list)
                 if isCapturingDrawed:
                     out.write(frame)
 
@@ -87,6 +87,7 @@ def main():
                 isCapturing = False
                 np.save(out_np, landmarks_list)
                 video_index += 1
+                print(f'NUMPY {landmarks_list}')
 
             # Showing FPS and alphabet indicator
             Show.current_alphabet_and_index(frame, alphabet, video_index)

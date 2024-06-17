@@ -64,12 +64,17 @@ class mp_holistic_legacy:
 
         """
         if results:
+            if results.face_landmarks:
+                mp_drawing.draw_landmarks(
+                    frame,
+                    results.face_landmarks,
+                    mp_holistic.FACEMESH_CONTOURS,
+                    landmark_drawing_spec=None,
+                    connection_drawing_spec=mp_drawing_styles
+                    .get_default_face_mesh_contours_style())
             if results.pose_landmarks:
                 mp_drawing.draw_landmarks(
                     frame, results.pose_landmarks, mp_holistic.POSE_CONNECTIONS)
-            if results.face_landmarks:
-                mp_drawing.draw_landmarks(
-                    frame, results.face_landmarks, mp_holistic.FACEMESH_CONTOURS)
             if results.left_hand_landmarks:
                 mp_drawing.draw_landmarks(
                     frame, results.left_hand_landmarks, mp_holistic.HAND_CONNECTIONS)
