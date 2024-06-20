@@ -23,7 +23,6 @@ def main():
     window_name = "BISINDO-Recognition"
     fps = 0
     frame_counter, capture_length = 0, 15
-    delay_length = 5
     isCapturingDrawed = True
 
     with mp_holistic_legacy.setup() as holistic:
@@ -63,22 +62,19 @@ def main():
             if isCapturing:
                 frame_counter += 1
 
-            if isCapturing and frame_counter < delay_length:
-                Show.capture_countdown(frame, frame_counter, delay_length)
-
-            if isCapturing and frame_counter > delay_length and frame_counter < capture_length+delay_length:
+            if isCapturing and frame_counter < capture_length:
                 out_raw.write(frame)
 
             # * Capture landmarks with mediapipe
             results = holistic.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             mp_holistic_legacy.draw(results, frame)
 
-            if isCapturing and frame_counter > delay_length and frame_counter < capture_length+delay_length:
+            if isCapturing and frame_counter < capture_length:
                 mp_holistic_legacy.collectData(results, landmarks_list)
                 if isCapturingDrawed:
                     out.write(frame)
 
-            if isCapturing and frame_counter == capture_length+delay_length:
+            if isCapturing and frame_counter == capture_length:
                 print(f'Capturing Done {alphabet}_{video_index}')
                 if isCapturingDrawed:
                     out.release()
@@ -93,7 +89,7 @@ def main():
             Show.current_alphabet_and_index(frame, alphabet, video_index)
             Show.menu(frame)
             Show.current_frame_captured(
-                frame, frame_counter-delay_length)
+                frame, frame_counter)
             pTime = Show.fps(frame, pTime)
 
             cv2.namedWindow(window_name)
