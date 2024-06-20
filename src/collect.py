@@ -5,21 +5,26 @@ from utils.mediapipe_legacy import mp_holistic_legacy
 import cv2
 import numpy as np
 
+startCapture = False
+alphabet = None
+
 
 def on_mouse_click(event, x, y, flags, param):
-    if event == cv2.EVENT_LBUTTONDOWN:
-        print("Left mouse button clicked at", x, y)
+    global startCapture, alphabet
+    if event == cv2.EVENT_LBUTTONDOWN and alphabet is not None:
+        startCapture = True
 
 
 def main():
+    global startCapture, alphabet
     # * Unchangeable initial values
     pTime = 0
-    alphabet, isSelectingAlphabet = None, False
+    isSelectingAlphabet = False
     isCapturing, video_index = False, 1
     landmarks_list = []
 
     # * Changable initial values
-    cap = init_fhd(0)
+    cap = init_fhd(1)
     window_name = "BISINDO-Recognition"
     fps = 0
     frame_counter, capture_length = 0, 15
@@ -36,9 +41,10 @@ def main():
             if key == ord('0'):
                 break
             if key == ord('1'):
+                alphabet = None
                 isSelectingAlphabet = True
                 video_index = 1
-            if key == ord(' ') and not isCapturing and alphabet is not None:
+            if startCapture and not isCapturing and alphabet is not None:
                 isCapturing = True
                 Folder.init(alphabet)
 
@@ -50,6 +56,7 @@ def main():
                         f'dataset/{alphabet}/{alphabet}_{video_index}_drawed.mp4', fourcc, fps if fps > 0 else 24, (frame.shape[1], frame.shape[0]))
                 out_np = (f'dataset/{alphabet}/{alphabet}_{video_index}.npy')
                 print(f'Start Capturing {alphabet}_{video_index}')
+                startCapture = False
 
             # Picking an alphabet
             if isSelectingAlphabet:
@@ -83,7 +90,7 @@ def main():
                 isCapturing = False
                 np.save(out_np, landmarks_list)
                 video_index += 1
-                print(f'NUMPY {landmarks_list}')
+                landmarks_list = []
 
             # Showing FPS and alphabet indicator
             Show.current_alphabet_and_index(frame, alphabet, video_index)

@@ -98,4 +98,4 @@ class mp_holistic_legacy:
             rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten(
             ) if results.right_hand_landmarks else np.zeros(21*3)
 
-        return landmarks_list.append(np.concatenate([pose, face, lh, rh]))
+            landmarks_list.append(np.concatenate([pose, face, lh, rh]))
