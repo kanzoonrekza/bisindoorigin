@@ -90,6 +90,8 @@ def main():
                 isCapturing = False
                 np.save(out_np, landmarks_list)
                 video_index += 1
+                video_index = Folder.get_current_index(
+                    alphabet, video_index)
                 landmarks_list = []
 
             # Showing FPS and alphabet indicator
