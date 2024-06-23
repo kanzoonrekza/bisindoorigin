@@ -4,7 +4,6 @@ from utils.video import Folder
 from utils.mediapipe_legacy import mp_holistic_legacy
 import cv2
 import numpy as np
-
 startCapture = False
 alphabet = None
 
@@ -16,6 +15,7 @@ def on_mouse_click(event, x, y, flags, param):
 
 
 def main():
+
     global startCapture, alphabet
     # * Unchangeable initial values
     pTime = 0

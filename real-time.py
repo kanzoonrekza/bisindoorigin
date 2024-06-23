@@ -3,13 +3,19 @@ from utils.show import Show
 from utils.mediapipe_legacy import mp_holistic_legacy
 import cv2
 
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+import numpy as np
+
+model = load_model('action.h5')
+
 
 def main():
     # * Unchangeable initial values
     pTime = 0
 
     # * Changable initial values
-    cap = init_fhd(0)
+    cap = init_fhd(1)
     window_name = "BISINDO-Recognition"
     fps = 0
 
