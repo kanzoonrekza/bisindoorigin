@@ -99,3 +99,17 @@ class mp_holistic_legacy:
             ) if results.right_hand_landmarks else np.zeros(21*3)
 
             landmarks_list.append(np.concatenate([pose, face, lh, rh]))
+
+    def collectDataHandsOnly(results, landmarks_list):
+        """Collects data from results
+
+        To use, call `mp_holistic_legacy.collectData(results)`
+
+        """
+        if results:
+            lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten(
+            ) if results.left_hand_landmarks else np.zeros(21*3)
+            rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten(
+            ) if results.right_hand_landmarks else np.zeros(21*3)
+
+            landmarks_list.append(np.concatenate([lh, rh]))
