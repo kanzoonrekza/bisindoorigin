@@ -10,8 +10,9 @@ import numpy as np
 import concurrent.futures
 
 # Load the model after setting memory growth
-model = load_model('action.h5')
+model = load_model('Logs/20240628-163454/action.h5')
 
+printed_result = "No Result"
 
 def predict_action(sequence):
     res = model.predict(np.expand_dims(sequence, axis=0))[0]
@@ -27,17 +28,25 @@ def main():
     future = None
 
     # * Changable initial values
-    cap = init_fhd(0)
+    cap = init_fhd(1)
     window_name = "BISINDO-Recognition"
     fps = 0
-    threshold = 0.8
 
     def print_prediction(result):
-        predicted_class_index = np.argmax(result)
-        confidence = result[predicted_class_index] * \
-            100  # Convert to percentage
-        predicted_action = actions[predicted_class_index]
-        print(f"Predicted: {predicted_action}, Confidence: {confidence:.2f}%")
+        # Get indices of top 3 predictions
+        top_indices = np.argsort(result)[-3:][::-1]
+        top_actions = [actions[i] for i in top_indices]
+        # Convert to percentages
+        top_confidences = [result[i] * 100 for i in top_indices]
+
+        return " ; ".join(
+            [f"{action}: {confidence:.2f}%" for action,
+                confidence in zip(top_actions, top_confidences)]
+        )
+
+    def update_printed_result(result):
+        global printed_result
+        printed_result = print_prediction(result)
 
     with mp_holistic_legacy.setup() as holistic:
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -62,9 +71,11 @@ def main():
                 if len(sequence) == 14 and (future is None or future.done()):
                     future = executor.submit(predict_action, sequence)
                     future.add_done_callback(
-                        lambda f: print_prediction(f.result()))
+                        lambda f: update_printed_result(f.result()))
 
                 pTime = Show.fps(frame, pTime)
+                cv2.putText(frame, printed_result, (10, 100),
+                            cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 3)
 
                 cv2.namedWindow(window_name)
                 cv2.imshow(window_name, frame)
