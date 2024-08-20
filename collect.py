@@ -21,7 +21,7 @@ def main():
     pTime = 0
     isSelectingAlphabet = False
     isCapturing, video_index = False, 1
-    landmarks_list = []
+    landmarks_list = [] # menampung landmarks
 
     # * Changable initial values
     cap = init_fhd(1)

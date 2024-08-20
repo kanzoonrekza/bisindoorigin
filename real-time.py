@@ -10,7 +10,7 @@ import numpy as np
 import concurrent.futures
 
 # Load the model after setting memory growth
-model = load_model('Logs/20240628-163454/action.h5')
+model = load_model('Logs/126-tanh-lr-0001-dupli-2-20240820-195155/action.h5')
 
 printed_result = "No Result"
 
@@ -28,7 +28,7 @@ def main():
     future = None
 
     # * Changable initial values
-    cap = init_fhd(1)
+    cap = init_fhd(0)
     window_name = "BISINDO-Recognition"
     fps = 0
 
@@ -75,7 +75,7 @@ def main():
 
                 pTime = Show.fps(frame, pTime)
                 cv2.putText(frame, printed_result, (10, 100),
-                            cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 3)
+                            cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
                 cv2.namedWindow(window_name)
                 cv2.imshow(window_name, frame)
