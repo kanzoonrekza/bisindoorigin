@@ -10,9 +10,11 @@ import numpy as np
 import concurrent.futures
 
 # Load the model after setting memory growth
-model = load_model('Logs/126-tanh-lr-0001-dupli-2-20240820-195155/action.h5')
+model_dir = 'Logs/1662-tanh-lr-001-dupli-1-300-epoch-20240822-192245'
+model = load_model(f'{model_dir}/action.h5')
 
 printed_result = "No Result"
+
 
 def predict_action(sequence):
     res = model.predict(np.expand_dims(sequence, axis=0))[0]
@@ -24,11 +26,10 @@ def main():
     pTime = 0
     sequence = []
     actions = np.array(ALL_CLASSES)
-    sentence = []
     future = None
 
     # * Changable initial values
-    cap = init_fhd(0)
+    cap = init_fhd(1)
     window_name = "BISINDO-Recognition"
     fps = 0
 
@@ -64,8 +65,10 @@ def main():
                     cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
                 mp_holistic_legacy.draw(results, frame)
 
-                # mp_holistic_legacy.collectData(results, sequence)
-                mp_holistic_legacy.collectDataHandsOnly(results, sequence)
+                if model_dir.startswith('Logs/126-'):
+                    mp_holistic_legacy.collectDataHandsOnly(results, sequence)
+                else:
+                    mp_holistic_legacy.collectData(results, sequence)
                 sequence = sequence[-14:]
 
                 if len(sequence) == 14 and (future is None or future.done()):
