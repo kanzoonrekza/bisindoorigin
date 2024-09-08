@@ -1,9 +1,12 @@
+# Utility functions
 from utils.camera import init_fhd
 from utils.show import Show
 from utils.video import Folder
 from utils.mediapipe_legacy import mp_holistic_legacy
+# Library
 import cv2
 import numpy as np
+# Global Variable
 startCapture = False
 alphabet = None
 
@@ -15,21 +18,19 @@ def on_mouse_click(event, x, y, flags, param):
 
 
 def main():
-
     global startCapture, alphabet
-    # * Unchangeable initial values
     pTime = 0
     isSelectingAlphabet = False
     isCapturing, video_index = False, 1
-    landmarks_list = [] # menampung landmarks
-
-    # * Changable initial values
-    cap = init_fhd(1)
+    landmarks_list = [] # storing landmarks temporarily
     window_name = "BISINDO-Recognition"
-    fps = 0
     frame_counter, capture_length = 0, 15
-    isCapturingDrawed = True
 
+    # ! Just in case, not used. always setted up this way
+    isCapturingDrawed = True
+    fps = 0
+
+    cap = init_fhd(1)
     with mp_holistic_legacy.setup() as holistic:
         while True:
             success, frame = cap.read()
