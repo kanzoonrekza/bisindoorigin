@@ -29,10 +29,6 @@ handsOnly = True  # Whether to use only hands or not
 learning_rate = 0.0001
 epoch = 100
 
-# %% [markdown]
-# ## Setup Variables
-
-# %%
 FOLDER_NAME = 'dataset'
 ALL_CLASSES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
                'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
@@ -60,7 +56,6 @@ for (root, folders, files) in os.walk(FOLDER_NAME):
             res = np.load(f'{FOLDER_NAME}/{file_path}')
             for _ in range(target_length-res.shape[0]):
                 res = np.vstack((res, res[-1, :]))
-            # uncomment this if you want to use only hands features
             if (handsOnly):
                 res = res[:, -126:]
             sequence.append(np.array(res))
@@ -124,37 +119,21 @@ model.summary()
 
 
 # %%
+# Save model
 model.save(f'{log_dir}/action.h5')
 
 # %%
 res = model.predict(X_test)
-
-# %%
-
-# Create Logs directory if it doesn't exist
-if not os.path.exists('Logs'):
-    os.makedirs('Logs')
-
-# Assume X_test and y_test are your test dataset
-# Make predictions
 y_pred = model.predict(X_test)
-
-# Convert predictions to class labels
 y_pred_classes = np.argmax(y_pred, axis=1)
-y_true = np.argmax(y_test, axis=1)  # if y_test is one-hot encoded
+y_true = np.argmax(y_test, axis=1)
 
-# Calculate accuracy
+# Calculate 
 accuracy = accuracy_score(y_true, y_pred_classes)
-
-# Calculate precision, recall, and F1 score for each class
 precision = precision_score(y_true, y_pred_classes, average='weighted')
 recall = recall_score(y_true, y_pred_classes, average='weighted')
 f1 = f1_score(y_true, y_pred_classes, average='weighted')
-
-# Infer the classes from y_test
 classes = np.unique(y_true)
-
-# Calculate log loss
 loss = log_loss(y_true, y_pred, labels=classes)
 
 # Redirect stdout to a string buffer
@@ -162,7 +141,6 @@ old_stdout = sys.stdout
 sys.stdout = buffer = io.StringIO()
 
 print(f"Training Phase: {training_phase}\n\n")
-# Print the results
 print(f"Accuracy: {accuracy}")
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
@@ -174,16 +152,9 @@ report = classification_report(y_true, y_pred_classes)
 
 # Restore stdout
 sys.stdout = old_stdout
-
-# Get the contents of the buffer
 output = buffer.getvalue()
 
-# Create the directory for the specific training phase if it doesn't exist
 phase_dir = f'Logs/{training_phase}'
-if not os.path.exists(phase_dir):
-    os.makedirs(phase_dir)
-
-# Save the output to a uniquely named text file in the Logs directory
 log_filename = f'{phase_dir}/summary.txt'
 with open(log_filename, 'w') as f:
     f.write(output)
