@@ -1,37 +1,33 @@
+# Utility functions
+
 from utils.camera import init_fhd
 from utils.show import Show
 from utils.mediapipe_legacy import mp_holistic_legacy
-import cv2
 from constants.classes import ALL_CLASSES
 
-import tensorflow as tf
-from keras.models import load_model
+import cv2
 import numpy as np
+import tensorflow as tf
 import concurrent.futures
-
-# Load the model after setting memory growth
-model_dir = 'Logs/1662-tanh-lr-001-dupli-1-300-epoch-20240822-192245'
-model = load_model(f'{model_dir}/action.h5')
-
-printed_result = "No Result"
-
-
-def predict_action(sequence):
-    res = model.predict(np.expand_dims(sequence, axis=0))[0]
-    return res
+from keras.models import load_model
 
 
 def main():
-    # * Unchangeable initial values
-    pTime = 0
-    sequence = []
-    actions = np.array(ALL_CLASSES)
-    future = None
+    model_dir = 'Logs/126-tanh-lr-0001-dupli-2-100-epoch-20240822-211834'
+    model = load_model(f'{model_dir}/action.h5')
 
-    # * Changable initial values
-    cap = init_fhd(1)
+    pTime = 0
+    actions = np.array(ALL_CLASSES)
+    sequence = []
+    future = None
+    printed_result = "No Result"
+
+    cap = init_fhd(0)
     window_name = "BISINDO-Recognition"
-    fps = 0
+
+    def predict_action(sequence):
+        res = model.predict(np.expand_dims(sequence, axis=0))[0]
+        return res
 
     def print_prediction(result):
         # Get indices of top 3 predictions
@@ -46,7 +42,7 @@ def main():
         )
 
     def update_printed_result(result):
-        global printed_result
+        nonlocal printed_result
         printed_result = print_prediction(result)
 
     with mp_holistic_legacy.setup() as holistic:
@@ -55,9 +51,10 @@ def main():
                 success, frame = cap.read()
                 if not success:
                     break
-                key = cv2.waitKey(int(1000 / fps) if fps > 0 else 1) & 0xFF
+                cv2.namedWindow(window_name)
 
-                # Keyboard keybinds
+                key = cv2.waitKey(1) & 0xFF
+
                 if key == ord('0'):
                     break
 
@@ -80,7 +77,6 @@ def main():
                 cv2.putText(frame, printed_result, (10, 100),
                             cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
-                cv2.namedWindow(window_name)
                 cv2.imshow(window_name, frame)
 
     return

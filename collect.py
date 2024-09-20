@@ -1,21 +1,21 @@
 # Utility functions
 from utils.camera import init_fhd
 from utils.show import Show
-from utils.video import Folder
 from utils.mediapipe_legacy import mp_holistic_legacy
+from utils.video import Folder
 # Library
 import cv2
 import numpy as np
 
 
 def main():
-    startCapture = False
-    alphabet = None
     pTime = 0
-    isSelectingAlphabet = False
+    startCapture = False
     isCapturing, video_index = False, 1
-    landmarks_list = []
     frame_counter, capture_length = 0, 15
+    alphabet = None
+    isSelectingAlphabet = False
+    landmarks_list = []
 
     cap = init_fhd(0)
     window_name = "Dataset Collector"
@@ -25,25 +25,24 @@ def main():
         if event == cv2.EVENT_LBUTTONDOWN and alphabet is not None:
             startCapture = True
 
-    cap = init_fhd(1)
     with mp_holistic_legacy.setup() as holistic:
         while True:
             success, frame = cap.read()
             if not success:
                 break
+            cv2.namedWindow(window_name)
+
             key = cv2.waitKey(1) & 0xFF
 
             if isCapturing:
                 frame_counter += 1
 
-            # Keyboard keybinds
             if key == ord('0'):
                 break
             if key == ord('1'):
                 alphabet = None
                 isSelectingAlphabet = True
                 video_index = 1
-            cv2.namedWindow(window_name)
             cv2.setMouseCallback(window_name, on_mouse_click)
 
             if startCapture and not isCapturing and alphabet is not None:
