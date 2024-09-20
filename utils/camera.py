@@ -19,11 +19,6 @@ def __setCap(width: int, height: int, index: int):
 
 
 def init_fhd(index=None):
-    """Initialize cap with FHD resolution (1920 x 1080) and handling when cap is not opened
-    Example Usage:
-        from utils.camera import init_fhd
-        cap = init_fhd() 
-    """
     cap = __setCap(height=CAMCONST.HEIGHT_FHD,
                    width=CAMCONST.WIDTH_FHD, index=index)
     __unopenedCamHandler(cap)
@@ -32,11 +27,6 @@ def init_fhd(index=None):
 
 
 def init_hd(index=None):
-    """Initialize cap with HD resolution (1280 x 720) and handling when cap is not opened
-    Example Usage:
-        from utils.camera import init_hd
-        cap = init_hd() 
-    """
     cap = __setCap(height=CAMCONST.HEIGHT_HD,
                    width=CAMCONST.WIDTH_HD, index=index)
     __unopenedCamHandler(cap)

@@ -27,9 +27,5 @@ class Folder:
 
 
 def show_menu(frame):
-    """Show menu based on switch case
-
-    Please update code when switch case modified
-    """
     cv2.putText(frame, f"Exit: 0 || Choose Alphabet: 1 || Capture: Spacebar",
                 (10, 700), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
