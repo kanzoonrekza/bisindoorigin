@@ -2,32 +2,39 @@
 # # Code for training the holistic model
 
 # %% [markdown]
+# # Pembuatan Model
+
+# %% [markdown]
 # ## Import Libraries
 #
 
 # %%
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, log_loss
-import io
+from datetime import datetime
+import os
 import sys
+import io
 import tensorflow as tf
 import numpy as np
-import os
-from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.callbacks import TensorBoard
 from keras.optimizers import Adam
 
-
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import multilabel_confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, log_loss, classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, log_loss, confusion_matrix
 
+# %% [markdown]
+# ## Setup Variables
+
+# %%
 # Variables
-n = 2  # Data duplication
+n = 1  # Data duplication
 handsOnly = True  # Whether to use only hands or not
 learning_rate = 0.0001
-epoch = 100
+epoch = 10
 
 FOLDER_NAME = 'dataset'
 ALL_CLASSES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -119,21 +126,25 @@ model.summary()
 
 
 # %%
-# Save model
 model.save(f'{log_dir}/action.h5')
 
+# %% [markdown]
+# # Evaluasi Model
+
 # %%
-res = model.predict(X_test)
+phase_dir = f'Logs/{training_phase}'
+if not os.path.exists(phase_dir):
+    os.makedirs(phase_dir)
+
 y_pred = model.predict(X_test)
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_true = np.argmax(y_test, axis=1)
+classes = np.unique(y_true)
 
-# Calculate 
 accuracy = accuracy_score(y_true, y_pred_classes)
 precision = precision_score(y_true, y_pred_classes, average='weighted')
 recall = recall_score(y_true, y_pred_classes, average='weighted')
 f1 = f1_score(y_true, y_pred_classes, average='weighted')
-classes = np.unique(y_true)
 loss = log_loss(y_true, y_pred, labels=classes)
 
 # Redirect stdout to a string buffer
@@ -147,25 +158,32 @@ print(f"Recall: {recall}")
 print(f"F1 Score: {f1}")
 print(f"Loss: {loss}")
 
-# Detailed classification report
 report = classification_report(y_true, y_pred_classes)
 
-# Restore stdout
 sys.stdout = old_stdout
 output = buffer.getvalue()
 
-phase_dir = f'Logs/{training_phase}'
+# Save the output to a uniquely named text file in the Logs directory
 log_filename = f'{phase_dir}/summary.txt'
+
 with open(log_filename, 'w') as f:
     f.write(output)
     f.write("\n")
     f.write(report)
 
-# Optionally, print the output to console as well
-print(output)
+# Create the confusion matrix
+cm = confusion_matrix(y_true, y_pred_classes)
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=True, square=True, linewidths=0,
+            xticklabels=[f'{ALL_CLASSES[cls]}' for cls in np.unique(y_true)],
+            yticklabels=[f'{ALL_CLASSES[cls]}' for cls in np.unique(y_true)])
 
 
-# %%
-actions = np.array(ALL_CLASSES)
-testing = 13
-print(actions[np.argmax(res[testing])], actions[np.argmax(y_test[testing])])
+# Add labels for axes
+plt.xlabel('Predicted Label', fontsize=12)
+plt.ylabel('True Label', fontsize=12)
+
+# Save the figure as a PDF
+plt.savefig(f'{phase_dir}/confusion_matrix.pdf', format='pdf')
+plt.close()

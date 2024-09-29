@@ -3,7 +3,7 @@ from utils.camera import init_fhd
 from utils.show import Show
 from utils.mediapipe_legacy import mp_holistic_legacy
 from utils.video import Folder
-# Library
+
 import cv2
 import numpy as np
 
