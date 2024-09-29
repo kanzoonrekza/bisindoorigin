@@ -132,10 +132,6 @@ model.save(f'{log_dir}/action.h5')
 # # Evaluasi Model
 
 # %%
-phase_dir = f'Logs/{training_phase}'
-if not os.path.exists(phase_dir):
-    os.makedirs(phase_dir)
-
 y_pred = model.predict(X_test)
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_true = np.argmax(y_test, axis=1)
@@ -164,7 +160,7 @@ sys.stdout = old_stdout
 output = buffer.getvalue()
 
 # Save the output to a uniquely named text file in the Logs directory
-log_filename = f'{phase_dir}/summary.txt'
+log_filename = f'{log_dir}/summary.txt'
 
 with open(log_filename, 'w') as f:
     f.write(output)
@@ -185,5 +181,5 @@ plt.xlabel('Predicted Label', fontsize=12)
 plt.ylabel('True Label', fontsize=12)
 
 # Save the figure as a PDF
-plt.savefig(f'{phase_dir}/confusion_matrix.pdf', format='pdf')
+plt.savefig(f'{log_dir}/confusion_matrix.pdf', format='pdf')
 plt.close()
