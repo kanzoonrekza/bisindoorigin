@@ -60,7 +60,6 @@ def main():
 
                 results = holistic.process(
                     cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-                mp_holistic_legacy.draw(results, frame)
 
                 if model_dir.startswith('Logs/126-'):
                     mp_holistic_legacy.collectDataHandsOnly(results, sequence)
@@ -73,6 +72,7 @@ def main():
                     future.add_done_callback(
                         lambda f: update_printed_result(f.result()))
 
+                mp_holistic_legacy.draw(results, frame)
                 pTime = Show.fps(frame, pTime)
                 cv2.putText(frame, printed_result, (10, 100),
                             cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
