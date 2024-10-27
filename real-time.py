@@ -13,7 +13,7 @@ from keras.models import load_model
 
 
 def main():
-    model_dir = 'Logs/126-tanh-lr-0001-dupli-2-100-epoch-20240822-211834'
+    model_dir = 'Logs/126-lr-0001-dupli-2-100-epoch-20241027-110051'
     model = load_model(f'{model_dir}/action.h5')
 
     pTime = 0

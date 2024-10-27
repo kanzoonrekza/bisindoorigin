@@ -9,6 +9,7 @@
 #
 
 # %%
+from utils.sssplit import balanced_train_test_split
 from datetime import datetime
 import os
 import sys
@@ -34,7 +35,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 n = 1  # Data duplication
 handsOnly = True  # Whether to use only hands or not
 learning_rate = 0.0001
-epoch = 10
+epoch = 100
 
 FOLDER_NAME = 'dataset'
 ALL_CLASSES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -89,14 +90,13 @@ tf.config.list_physical_devices('GPU')
 # ## Training Data
 
 # %%
-X_train, X_test, y_train, y_test = train_test_split(np.array(sequence), tf.keras.utils.to_categorical(
-    np.array(label).astype(int), num_classes=np.array(ALL_CLASSES).shape[0], dtype='float32'), test_size=0.2)
+X_train, X_test, y_train, y_test = balanced_train_test_split(np.array(sequence),
+                                                             np.array(label).astype(int))
 
 print(X_train.shape, X_test.shape)
 
-
 # %%
-training_phase = str(np.array(sequence).shape[2]) + "-tanh-lr-" + str(learning_rate).replace(
+training_phase = str(np.array(sequence).shape[2]) + "-lr-" + str(learning_rate).replace(
     "0.", "") + "-dupli-" + str(n) + "-" + str(epoch) + "-epoch-" + datetime.now().strftime("%Y%m%d-%H%M%S")
 log_dir = os.path.join('Logs', training_phase)
 tb_callback = TensorBoard(log_dir=log_dir)
