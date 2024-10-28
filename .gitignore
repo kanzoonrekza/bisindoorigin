@@ -7,3 +7,5 @@ ActionDetectionforSignLanguage
 mediapipe_models
 
 Logs*
+
+*.csv
