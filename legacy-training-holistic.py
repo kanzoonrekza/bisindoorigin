@@ -21,10 +21,9 @@ import seaborn as sns
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
-from keras.callbacks import TensorBoard
+from keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
 from keras.optimizers import Adam
 
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, log_loss, confusion_matrix
 
 # %% [markdown]
@@ -32,10 +31,10 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 # %%
 # Variables
-n = 1  # Data duplication
+n = 1  # Data augmentation
 handsOnly = True  # Whether to use only hands or not
 learning_rate = 0.0001
-epoch = 100
+epoch = 300
 
 FOLDER_NAME = 'dataset'
 ALL_CLASSES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -96,12 +95,14 @@ X_train, X_test, y_train, y_test = balanced_train_test_split(np.array(sequence),
 print(X_train.shape, X_test.shape)
 
 # %%
-training_phase = str(np.array(sequence).shape[2]) + "-lr-" + str(learning_rate).replace(
-    "0.", "") + "-dupli-" + str(n) + "-" + str(epoch) + "-epoch-" + datetime.now().strftime("%Y%m%d-%H%M%S")
+training_phase = str(np.array(
+    sequence).shape[2]) + "-" + str(n) + "X-" + datetime.now().strftime("%Y%m%d-%H%M%S")
 log_dir = os.path.join('Logs', training_phase)
 tb_callback = TensorBoard(log_dir=log_dir)
 
-print(log_dir)
+print(training_phase)
+
+# %%
 
 model = Sequential()
 model.add(LSTM(64, return_sequences=True,
@@ -117,16 +118,29 @@ optimizer = Adam(learning_rate=learning_rate)
 model.compile(optimizer=optimizer, loss='categorical_crossentropy',
               metrics=['categorical_accuracy'])
 
-# %%
-model.fit(X_train, y_train, epochs=epoch, callbacks=[
-          tb_callback])
+early_stopping = EarlyStopping(
+    monitor='val_loss',
+    patience=10,
+    min_delta=0.001,
+    mode='min',
+    restore_best_weights=True
+)
+
+model_checkpoint = ModelCheckpoint(
+    f'{log_dir}/action.h5',
+    monitor='val_loss',
+    save_best_only=True,
+    mode='min',
+    verbose=1
+)
 
 # %%
-model.summary()
-
-
-# %%
-model.save(f'{log_dir}/action.h5')
+history = model.fit(
+    X_train, y_train,
+    epochs=epoch,
+    validation_data=(X_test, y_test),
+    callbacks=[tb_callback, early_stopping, model_checkpoint]
+)
 
 # %% [markdown]
 # # Evaluasi Model
@@ -143,16 +157,37 @@ recall = recall_score(y_true, y_pred_classes, average='weighted')
 f1 = f1_score(y_true, y_pred_classes, average='weighted')
 loss = log_loss(y_true, y_pred, labels=classes)
 
+history_data = history.history
+start_epoch = max(0, len(history_data['loss']) - 20)
+stopped_epoch = early_stopping.stopped_epoch
+best_epoch = stopped_epoch - early_stopping.patience
+
 # Redirect stdout to a string buffer
 old_stdout = sys.stdout
 sys.stdout = buffer = io.StringIO()
 
-print(f"Training Phase: {training_phase}\n\n")
+print(f"Training Phase: {training_phase}\n")
 print(f"Accuracy: {accuracy}")
 print(f"Precision: {precision}")
 print(f"Recall: {recall}")
 print(f"F1 Score: {f1}")
 print(f"Loss: {loss}")
+
+print("\nLast 20 Epochs:")
+for epoch in range(start_epoch, len(history_data['loss'])):
+    loss = history_data['loss'][epoch]
+    accuracy = history_data.get('categorical_accuracy', [None])[epoch]
+    val_loss = history_data['val_loss'][epoch]
+    val_accuracy = history_data.get('val_categorical_accuracy', [None])[epoch]
+    print(f"Epoch {epoch + 1}: loss = {loss:.8f}, categorical_accuracy = {accuracy:.8f} | val_loss = {val_loss:.8f}, val_categorical_accuracy = {val_accuracy:.8f}")
+
+print(f"\nStopped at epoch: {stopped_epoch + 1}")
+print(f"Best epoch (saved weights): Epoch {best_epoch + 1}")
+
+print("\nEarly Stopping Configuration:")
+print(f"Patience: {early_stopping.patience}")
+print(f"Monitored value: {early_stopping.monitor}")
+print(f"Baseline: {early_stopping.baseline}")
 
 report = classification_report(y_true, y_pred_classes)
 
@@ -166,6 +201,8 @@ with open(log_filename, 'w') as f:
     f.write(output)
     f.write("\n")
     f.write(report)
+
+# %%
 
 # Create the confusion matrix
 cm = confusion_matrix(y_true, y_pred_classes)

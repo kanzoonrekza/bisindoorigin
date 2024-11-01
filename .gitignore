@@ -9,3 +9,6 @@ mediapipe_models
 Logs*
 
 *.csv
+
+notebook_runs
+train-*.ipynb
