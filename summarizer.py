@@ -21,8 +21,10 @@ for root, dirs, files in os.walk(logs_dir):
 
                 # Check if we have at least 19 lines
                 if len(lines) >= 19:
-                    line_1 = line_1 = lines[0][16:-17].strip()  # First line
-                    if len(line_1) == 6:
+                    # First line
+                    line_1 = lines[0][16:-17].strip() + " " + \
+                        lines[0][-7:].strip()
+                    if len(line_1) == 13:
                         line_1 += " "
 
                     # Nineteenth line (best epoch line.)

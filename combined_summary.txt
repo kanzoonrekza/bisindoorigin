@@ -1,40 +1,40 @@
-126-1X  => Epoch 102: loss = 0.10250276, categorical_accuracy = 0.97500002 | val_loss = 0.12916572, val_categorical_accuracy = 0.96153843
-126-1X  => Epoch 120: loss = 0.09735684, categorical_accuracy = 0.96730769 | val_loss = 0.10116122, val_categorical_accuracy = 0.96923077
-126-1X  => Epoch 110: loss = 0.11288953, categorical_accuracy = 0.97019231 | val_loss = 0.09357634, val_categorical_accuracy = 0.98461539
-126-1X  => Epoch 87 : loss = 0.21614836, categorical_accuracy = 0.92884618 | val_loss = 0.26364845, val_categorical_accuracy = 0.91923076
-126-1X  => Epoch 105: loss = 0.12447383, categorical_accuracy = 0.97307694 | val_loss = 0.12700246, val_categorical_accuracy = 0.96923077
-126-1X  => Epoch 164: loss = 0.07313181, categorical_accuracy = 0.98365384 | val_loss = 0.08830755, val_categorical_accuracy = 0.96923077
-126-1X  => Epoch 151: loss = 0.05783546, categorical_accuracy = 0.98365384 | val_loss = 0.05269992, val_categorical_accuracy = 0.98076922
-126-1X  => Epoch 83 : loss = 0.13163710, categorical_accuracy = 0.96346152 | val_loss = 0.13710567, val_categorical_accuracy = 0.97307694
-126-1X  => Epoch 141: loss = 0.09741081, categorical_accuracy = 0.97500002 | val_loss = 0.09212998, val_categorical_accuracy = 0.97692305
-126-1X  => Epoch 121: loss = 0.07115061, categorical_accuracy = 0.98365384 | val_loss = 0.07274399, val_categorical_accuracy = 0.98461539
-126-2X  => Epoch 104: loss = 0.02171236, categorical_accuracy = 0.99615383 | val_loss = 0.01682691, val_categorical_accuracy = 0.99807692
-126-2X  => Epoch 89 : loss = 0.03950391, categorical_accuracy = 0.98798078 | val_loss = 0.02916236, val_categorical_accuracy = 0.99230766
-126-2X  => Epoch 118: loss = 0.01133551, categorical_accuracy = 0.99855769 | val_loss = 0.00959677, val_categorical_accuracy = 0.99807692
-126-2X  => Epoch 56 : loss = 0.09525247, categorical_accuracy = 0.97067308 | val_loss = 0.07331893, val_categorical_accuracy = 0.99038464
-126-2X  => Epoch 129: loss = 0.00948485, categorical_accuracy = 1.00000000 | val_loss = 0.00664483, val_categorical_accuracy = 1.00000000
-126-2X  => Epoch 49 : loss = 0.10125935, categorical_accuracy = 0.97596157 | val_loss = 0.09657980, val_categorical_accuracy = 0.98076922
-126-2X  => Epoch 81 : loss = 0.05136192, categorical_accuracy = 0.98653847 | val_loss = 0.04215288, val_categorical_accuracy = 0.99615383
-126-2X  => Epoch 108: loss = 0.04526458, categorical_accuracy = 0.98557693 | val_loss = 0.01995846, val_categorical_accuracy = 0.99807692
-126-2X  => Epoch 150: loss = 0.00701871, categorical_accuracy = 0.99951923 | val_loss = 0.00663820, val_categorical_accuracy = 1.00000000
-126-2X  => Epoch 76 : loss = 0.07845205, categorical_accuracy = 0.97548079 | val_loss = 0.03550901, val_categorical_accuracy = 0.99615383
-1662-1X => Epoch 125: loss = 0.65862709, categorical_accuracy = 0.78173077 | val_loss = 0.74266535, val_categorical_accuracy = 0.79230767
-1662-1X => Epoch 114: loss = 0.59337837, categorical_accuracy = 0.81250000 | val_loss = 0.65063256, val_categorical_accuracy = 0.80769229
-1662-1X => Epoch 93 : loss = 0.71290475, categorical_accuracy = 0.76057690 | val_loss = 0.71355712, val_categorical_accuracy = 0.75769234
-1662-1X => Epoch 106: loss = 0.47550970, categorical_accuracy = 0.84134614 | val_loss = 0.52118194, val_categorical_accuracy = 0.82692307
-1662-1X => Epoch 142: loss = 0.44505641, categorical_accuracy = 0.86730766 | val_loss = 0.45318604, val_categorical_accuracy = 0.86538464
-1662-1X => Epoch 188: loss = 0.19311137, categorical_accuracy = 0.94903845 | val_loss = 0.27898902, val_categorical_accuracy = 0.93461537
-1662-1X => Epoch 144: loss = 0.34874186, categorical_accuracy = 0.88076925 | val_loss = 0.41767913, val_categorical_accuracy = 0.86153847
-1662-1X => Epoch 85 : loss = 0.72416955, categorical_accuracy = 0.76249999 | val_loss = 0.80827194, val_categorical_accuracy = 0.73846155
-1662-1X => Epoch 83 : loss = 0.70881397, categorical_accuracy = 0.80192310 | val_loss = 0.74160087, val_categorical_accuracy = 0.77692306
-1662-1X => Epoch 129: loss = 0.48003748, categorical_accuracy = 0.84711540 | val_loss = 0.56463379, val_categorical_accuracy = 0.82692307
-1662-2X => Epoch 155: loss = 0.14380041, categorical_accuracy = 0.96009618 | val_loss = 0.13822497, val_categorical_accuracy = 0.97115386
-1662-2X => Epoch 136: loss = 0.17451552, categorical_accuracy = 0.94903845 | val_loss = 0.21373112, val_categorical_accuracy = 0.93461537
-1662-2X => Epoch 74 : loss = 0.36860469, categorical_accuracy = 0.87548077 | val_loss = 0.30970725, val_categorical_accuracy = 0.89230770
-1662-2X => Epoch 114: loss = 0.14890128, categorical_accuracy = 0.95480770 | val_loss = 0.15646395, val_categorical_accuracy = 0.96538460
-1662-2X => Epoch 93 : loss = 0.23816153, categorical_accuracy = 0.91682690 | val_loss = 0.22722247, val_categorical_accuracy = 0.93653846
-1662-2X => Epoch 68 : loss = 0.47930470, categorical_accuracy = 0.84807694 | val_loss = 0.44622272, val_categorical_accuracy = 0.85961539
-1662-2X => Epoch 141: loss = 0.11050368, categorical_accuracy = 0.97500002 | val_loss = 0.12310198, val_categorical_accuracy = 0.96153843
-1662-2X => Epoch 60 : loss = 0.44693547, categorical_accuracy = 0.84134614 | val_loss = 0.38992712, val_categorical_accuracy = 0.87307692
-1662-2X => Epoch 75 : loss = 0.35747457, categorical_accuracy = 0.89567310 | val_loss = 0.36619639, val_categorical_accuracy = 0.88846153
-1662-2X => Epoch 93 : loss = 0.23022041, categorical_accuracy = 0.93028843 | val_loss = 0.22898577, val_categorical_accuracy = 0.93269229
+126-1X 104343  => Epoch 102: loss = 0.10250276, categorical_accuracy = 0.97500002 | val_loss = 0.12916572, val_categorical_accuracy = 0.96153843
+126-1X 104623  => Epoch 120: loss = 0.09735684, categorical_accuracy = 0.96730769 | val_loss = 0.10116122, val_categorical_accuracy = 0.96923077
+126-1X 104920  => Epoch 110: loss = 0.11288953, categorical_accuracy = 0.97019231 | val_loss = 0.09357634, val_categorical_accuracy = 0.98461539
+126-1X 105216  => Epoch 87 : loss = 0.21614836, categorical_accuracy = 0.92884618 | val_loss = 0.26364845, val_categorical_accuracy = 0.91923076
+126-1X 105452  => Epoch 105: loss = 0.12447383, categorical_accuracy = 0.97307694 | val_loss = 0.12700246, val_categorical_accuracy = 0.96923077
+126-1X 105755  => Epoch 164: loss = 0.07313181, categorical_accuracy = 0.98365384 | val_loss = 0.08830755, val_categorical_accuracy = 0.96923077
+126-1X 110156  => Epoch 151: loss = 0.05783546, categorical_accuracy = 0.98365384 | val_loss = 0.05269992, val_categorical_accuracy = 0.98076922
+126-1X 110540  => Epoch 83 : loss = 0.13163710, categorical_accuracy = 0.96346152 | val_loss = 0.13710567, val_categorical_accuracy = 0.97307694
+126-1X 110755  => Epoch 141: loss = 0.09741081, categorical_accuracy = 0.97500002 | val_loss = 0.09212998, val_categorical_accuracy = 0.97692305
+126-1X 111120  => Epoch 121: loss = 0.07115061, categorical_accuracy = 0.98365384 | val_loss = 0.07274399, val_categorical_accuracy = 0.98461539
+126-2X 111420  => Epoch 104: loss = 0.02171236, categorical_accuracy = 0.99615383 | val_loss = 0.01682691, val_categorical_accuracy = 0.99807692
+126-2X 111744  => Epoch 89 : loss = 0.03950391, categorical_accuracy = 0.98798078 | val_loss = 0.02916236, val_categorical_accuracy = 0.99230766
+126-2X 112052  => Epoch 118: loss = 0.01133551, categorical_accuracy = 0.99855769 | val_loss = 0.00959677, val_categorical_accuracy = 0.99807692
+126-2X 112448  => Epoch 56 : loss = 0.09525247, categorical_accuracy = 0.97067308 | val_loss = 0.07331893, val_categorical_accuracy = 0.99038464
+126-2X 112714  => Epoch 129: loss = 0.00948485, categorical_accuracy = 1.00000000 | val_loss = 0.00664483, val_categorical_accuracy = 1.00000000
+126-2X 113116  => Epoch 49 : loss = 0.10125935, categorical_accuracy = 0.97596157 | val_loss = 0.09657980, val_categorical_accuracy = 0.98076922
+126-2X 113323  => Epoch 81 : loss = 0.05136192, categorical_accuracy = 0.98653847 | val_loss = 0.04215288, val_categorical_accuracy = 0.99615383
+126-2X 113557  => Epoch 108: loss = 0.04526458, categorical_accuracy = 0.98557693 | val_loss = 0.01995846, val_categorical_accuracy = 0.99807692
+126-2X 113905  => Epoch 150: loss = 0.00701871, categorical_accuracy = 0.99951923 | val_loss = 0.00663820, val_categorical_accuracy = 1.00000000
+126-2X 114304  => Epoch 76 : loss = 0.07845205, categorical_accuracy = 0.97548079 | val_loss = 0.03550901, val_categorical_accuracy = 0.99615383
+1662-1X 114534 => Epoch 125: loss = 0.65862709, categorical_accuracy = 0.78173077 | val_loss = 0.74266535, val_categorical_accuracy = 0.79230767
+1662-1X 114840 => Epoch 114: loss = 0.59337837, categorical_accuracy = 0.81250000 | val_loss = 0.65063256, val_categorical_accuracy = 0.80769229
+1662-1X 115142 => Epoch 93 : loss = 0.71290475, categorical_accuracy = 0.76057690 | val_loss = 0.71355712, val_categorical_accuracy = 0.75769234
+1662-1X 115422 => Epoch 106: loss = 0.47550970, categorical_accuracy = 0.84134614 | val_loss = 0.52118194, val_categorical_accuracy = 0.82692307
+1662-1X 115720 => Epoch 142: loss = 0.44505641, categorical_accuracy = 0.86730766 | val_loss = 0.45318604, val_categorical_accuracy = 0.86538464
+1662-1X 120038 => Epoch 188: loss = 0.19311137, categorical_accuracy = 0.94903845 | val_loss = 0.27898902, val_categorical_accuracy = 0.93461537
+1662-1X 120443 => Epoch 144: loss = 0.34874186, categorical_accuracy = 0.88076925 | val_loss = 0.41767913, val_categorical_accuracy = 0.86153847
+1662-1X 120808 => Epoch 85 : loss = 0.72416955, categorical_accuracy = 0.76249999 | val_loss = 0.80827194, val_categorical_accuracy = 0.73846155
+1662-1X 121036 => Epoch 83 : loss = 0.70881397, categorical_accuracy = 0.80192310 | val_loss = 0.74160087, val_categorical_accuracy = 0.77692306
+1662-1X 121307 => Epoch 129: loss = 0.48003748, categorical_accuracy = 0.84711540 | val_loss = 0.56463379, val_categorical_accuracy = 0.82692307
+1662-2X 121607 => Epoch 155: loss = 0.14380041, categorical_accuracy = 0.96009618 | val_loss = 0.13822497, val_categorical_accuracy = 0.97115386
+1662-2X 122021 => Epoch 136: loss = 0.17451552, categorical_accuracy = 0.94903845 | val_loss = 0.21373112, val_categorical_accuracy = 0.93461537
+1662-2X 122442 => Epoch 74 : loss = 0.36860469, categorical_accuracy = 0.87548077 | val_loss = 0.30970725, val_categorical_accuracy = 0.89230770
+1662-2X 122718 => Epoch 114: loss = 0.14890128, categorical_accuracy = 0.95480770 | val_loss = 0.15646395, val_categorical_accuracy = 0.96538460
+1662-2X 123056 => Epoch 93 : loss = 0.23816153, categorical_accuracy = 0.91682690 | val_loss = 0.22722247, val_categorical_accuracy = 0.93653846
+1662-2X 123352 => Epoch 68 : loss = 0.47930470, categorical_accuracy = 0.84807694 | val_loss = 0.44622272, val_categorical_accuracy = 0.85961539
+1662-2X 123620 => Epoch 141: loss = 0.11050368, categorical_accuracy = 0.97500002 | val_loss = 0.12310198, val_categorical_accuracy = 0.96153843
+1662-2X 124032 => Epoch 60 : loss = 0.44693547, categorical_accuracy = 0.84134614 | val_loss = 0.38992712, val_categorical_accuracy = 0.87307692
+1662-2X 124246 => Epoch 75 : loss = 0.35747457, categorical_accuracy = 0.89567310 | val_loss = 0.36619639, val_categorical_accuracy = 0.88846153
+1662-2X 124522 => Epoch 93 : loss = 0.23022041, categorical_accuracy = 0.93028843 | val_loss = 0.22898577, val_categorical_accuracy = 0.93269229

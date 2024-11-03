@@ -98,12 +98,10 @@ print(X_train.shape, X_test.shape)
 training_phase = str(np.array(
     sequence).shape[2]) + "-" + str(n) + "X-" + datetime.now().strftime("%Y%m%d-%H%M%S")
 log_dir = os.path.join('Logs', training_phase)
-tb_callback = TensorBoard(log_dir=log_dir)
 
 print(training_phase)
 
 # %%
-
 model = Sequential()
 model.add(LSTM(64, return_sequences=True,
                activation='tanh', input_shape=(14, np.array(sequence).shape[2])))
@@ -118,6 +116,7 @@ optimizer = Adam(learning_rate=learning_rate)
 model.compile(optimizer=optimizer, loss='categorical_crossentropy',
               metrics=['categorical_accuracy'])
 
+tb_callback = TensorBoard(log_dir=log_dir)
 early_stopping = EarlyStopping(
     monitor='val_loss',
     patience=10,
@@ -125,7 +124,6 @@ early_stopping = EarlyStopping(
     mode='min',
     restore_best_weights=True
 )
-
 model_checkpoint = ModelCheckpoint(
     f'{log_dir}/action.h5',
     monitor='val_loss',
