@@ -13,14 +13,15 @@ from keras.models import load_model
 
 
 def main():
-    model_dir = 'Logs/126-lr-0001-dupli-2-100-epoch-20241027-110051'
-    model = load_model(f'{model_dir}/action.h5')
+    model_dir = 'model/h2-9.h5'
+    model = load_model(model_dir)
 
     pTime = 0
     actions = np.array(ALL_CLASSES)
     sequence = []
     future = None
     printed_result = "No Result"
+    confidence_result = "-"
 
     cap = init_fhd(0)
     window_name = "BISINDO-Recognition"
@@ -30,11 +31,17 @@ def main():
         return res
 
     def print_prediction(result):
+        nonlocal confidence_result
         # Get indices of top 3 predictions
         top_indices = np.argsort(result)[-3:][::-1]
         top_actions = [actions[i] for i in top_indices]
         # Convert to percentages
         top_confidences = [result[i] * 100 for i in top_indices]
+
+        if (top_confidences[0] > 70):
+            confidence_result = str(actions[top_indices[0]])
+        else:
+            confidence_result = "-"
 
         return " ; ".join(
             [f"{action}: {confidence:.2f}%" for action,
@@ -61,7 +68,7 @@ def main():
                 results = holistic.process(
                     cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-                if model_dir.startswith('Logs/126-'):
+                if model_dir.startswith('model/h'):
                     mp_holistic_legacy.collectDataHandsOnly(results, sequence)
                 else:
                     mp_holistic_legacy.collectData(results, sequence)
@@ -74,8 +81,12 @@ def main():
 
                 mp_holistic_legacy.draw(results, frame)
                 pTime = Show.fps(frame, pTime)
-                cv2.putText(frame, printed_result, (10, 100),
-                            cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                cv2.putText(frame, printed_result, (10, 110),
+                            cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 3)
+                cv2.putText(frame, confidence_result, (10, 160),
+                            cv2.FONT_HERSHEY_PLAIN, 3, (50, 0, 0), 3)
+                cv2.putText(frame, str(model_dir), (1500, 110),
+                            cv2.FONT_HERSHEY_PLAIN, 3, (102, 0, 102), 3)
 
                 cv2.imshow(window_name, frame)
 
