@@ -30,7 +30,8 @@ def main():
         res = model.predict(np.expand_dims(sequence, axis=0))[0]
         return res
 
-    def print_prediction(result):
+    def update_prediction(result):
+        nonlocal printed_result
         nonlocal confidence_result
         # Get indices of top 3 predictions
         top_indices = np.argsort(result)[-3:][::-1]
@@ -43,14 +44,10 @@ def main():
         else:
             confidence_result = "-"
 
-        return " ; ".join(
+        printed_result = " ; ".join(
             [f"{action}: {confidence:.2f}%" for action,
                 confidence in zip(top_actions, top_confidences)]
         )
-
-    def update_printed_result(result):
-        nonlocal printed_result
-        printed_result = print_prediction(result)
 
     with mp_holistic_legacy.setup() as holistic:
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -77,7 +74,7 @@ def main():
                 if len(sequence) == 14 and (future is None or future.done()):
                     future = executor.submit(predict_action, sequence)
                     future.add_done_callback(
-                        lambda f: update_printed_result(f.result()))
+                        lambda f: update_prediction(f.result()))
 
                 mp_holistic_legacy.draw(results, frame)
                 pTime = Show.fps(frame, pTime)
